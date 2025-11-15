@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AJS RADIO</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0f1724;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .player {
+      width: 300px;
+      background: #111a2e;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: #06b6d4;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      margin: 0 auto 10px;
+      color: #000;
+    }
+    button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      margin: 5px;
+      cursor: pointer;
+      background: #06b6d4;
+      color: #000;
+      font-size: 16px;
+    }
+    button:active { opacity: 0.7; }
+    input[type=range] { width: 100%; margin-top: 10px; }
+    #statusText { font-size: 14px; opacity: 0.7; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="player">
+  <div class="logo">FM</div>
+  <h2>AJS RADIO</h2>
+
+  <audio id="player">
+    <source src="http://102.208.228.22:8000/stream.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="playBtn">Play</button>
+  <button id="stopBtn">Stop</button>
+  <button id="muteBtn">Mute</button>
+
+  <input id="volume" type="range" min="0" max="1" step="0.01" value="1">
+
+  <div id="statusText">Stopped</div>
+</div>
+
+<script>
+  const player = document.getElementById('player');
+  const playBtn = document.getElementById('playBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const muteBtn = document.getElementById('muteBtn');
+  const volume = document.getElementById('volume');
+  const statusText = document.getElementById('statusText');
+
+  let isPlaying = false;
+  let isMuted = false;
+
+  function setStatus(text) { statusText.textContent = text; }
+
+  playBtn.onclick = () => {
+    if (!isPlaying) {
+      player.play();
+      playBtn.textContent = 'Pause';
+      isPlaying = true;
+      setStatus('Playing');
+    } else {
+      player.pause();
+      playBtn.textContent = 'Play';
+      isPlaying = false;
+      setStatus('Paused');
+    }
+  };
+
+  stopBtn.onclick = () => {
+    player.pause();
+    player.currentTime = 0;
+    playBtn.textContent = 'Play';
+    isPlaying = false;
+    setStatus('Stopped');
+  };
+
+  muteBtn.onclick = () => {
+    isMuted = !isMuted;
+    player.muted = isMuted;
+    muteBtn.textContent = isMuted ? 'Unmute' : 'Mute';
+  };
+
+  volume.oninput = () => {
+    player.volume = volume.value;
+  };
+</script>
+
+</body>
+</html>
